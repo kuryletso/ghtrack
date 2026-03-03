@@ -84,8 +84,8 @@ class GitHubClient:
 
         for cell in cells:
             contributions.append(ContributionDay(
-                date=cell["data-date"],
-                level=int(cell.get("data-level",0))
+                date=cell["data-date"],                 # type: ignore
+                level=int(cell.get("data-level",0))     # type: ignore
             ))
         return contributions
 
@@ -93,7 +93,7 @@ class GitHubClient:
     def fetch_user_activity(
             self,
             username: str,
-            limit: int = 10,
+            limit: int = 50,
     ) -> list[ActivityEvent]:
         data = self._get(f"/users/{username}/events")    
         events = []

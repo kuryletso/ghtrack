@@ -1,6 +1,7 @@
 import argparse
 import sys
 from api import GitHubClient
+from activity import render_activity
 
 def handle_graph(
         username: str,
@@ -30,7 +31,7 @@ def parse_args():
                         help="Output raw JSON instead of formatted output")
     parser.add_argument("-l","--limit",
                         type=int,
-                        default=10,
+                        default=50,
                         help="Number of recent activities to show (default=10)")
     parser.add_argument("--no-color",
                         action="store_true",
@@ -67,9 +68,13 @@ def main():
                 username=username,
                 limit=args.limit
             )
-            if args.json:
-                raw_events = [event.raw for event in activity]
-                print(raw_events)
+            output: str = render_activity(
+                events=activity,
+                username=username,
+                return_json=args.json,
+                no_color=args.no_color
+            )
+            print(output)
 
 
 
