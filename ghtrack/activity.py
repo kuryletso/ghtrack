@@ -10,17 +10,11 @@ class RepoActivity:
     event_cnt: dict[str,int]
     last_update: datetime
 
-def render_activity(
+def format_activity_text(
         events: list[ActivityEvent],
         username: str,
-        return_json: bool = False,
         no_color: bool = False
         ) -> str:
-    
-    if return_json:
-        parsed_events = [event.raw for event in events]
-        json_string = json.dumps(parsed_events, indent=2)
-        return json_string
 
     # Group by repos
     repos: dict[str, RepoActivity] = {}
@@ -53,3 +47,11 @@ def render_activity(
             content.append(row)
 
     return header + "\n".join(content)
+
+def format_activity_json(
+        events: list[ActivityEvent]
+) -> str:
+    
+    parsed_events = [event.raw for event in events]
+    json_string = json.dumps(parsed_events, indent=2)
+    return json_string

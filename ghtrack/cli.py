@@ -1,7 +1,7 @@
 import argparse
 import sys
 from api import GitHubClient
-from activity import render_activity
+from activity import format_activity_text, format_activity_json
 
 def handle_graph(
         username: str,
@@ -68,12 +68,15 @@ def main():
                 username=username,
                 limit=args.limit
             )
-            output: str = render_activity(
-                events=activity,
-                username=username,
-                return_json=args.json,
-                no_color=args.no_color
-            )
+            output: str = ''
+            if args.json:
+                output = format_activity_json(activity)
+            else:
+                output = format_activity_text(
+                    events=activity,
+                    username=username,
+                    no_color=args.no_color
+                )
             print(output)
 
 
