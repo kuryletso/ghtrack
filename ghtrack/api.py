@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from bs4 import BeautifulSoup
+from datetime import datetime
 import httpx
 import os
 
@@ -9,7 +10,7 @@ import os
 class ActivityEvent:
     type: str
     repo: str
-    created_at: str
+    created_at: datetime
     raw: dict
 
 @dataclass
@@ -19,6 +20,14 @@ class ContributionDay:
 
 class GitHubAPIError(Exception):
     pass
+
+def _parse_datetime(dt: str) -> datetime:
+    try:
+        return datetime.fromisoformat(dt)
+    except ValueError as e:
+        raise GitHubAPIError(
+            f"Invalid datetime format in user activity: {dt}"
+        )
 
 # BUILD CLIENT
 class GitHubClient:
@@ -102,7 +111,7 @@ class GitHubClient:
                 ActivityEvent(
                     type=item["type"],
                     repo=item["repo"]["name"],
-                    created_at=item["created_at"],
+                    created_at= _parse_datetime(item["created_at"]),
                     raw=item
                 )
             )

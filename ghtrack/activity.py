@@ -1,13 +1,14 @@
 from api import ActivityEvent, ContributionDay
 from dataclasses import dataclass
 from collections import defaultdict
+from datetime import datetime
 import json
 
 
 @dataclass
 class RepoActivity:
-    event_cnt: defaultdict[str,int]
-    last_update: str
+    event_cnt: dict[str,int]
+    last_update: datetime
 
 def render_activity(
         events: list[ActivityEvent],
@@ -18,33 +19,36 @@ def render_activity(
     
     if return_json:
         parsed_events = [event.raw for event in events]
-        json_string = json.dumps(parsed_events)
+        json_string = json.dumps(parsed_events, indent=2)
         return json_string
 
     # Group by repos
     repos: dict[str, RepoActivity] = {}
     for event in events:
         repo = repos.get(event.repo)
-        if not repo:
-            repo = RepoActivity(
-                event_cnt=defaultdict(int),
-                last_update=event.created_at
-            )
-            repos[event.repo] = repo
+        if event.repo not in repos:
+            repos.setdefault(
+                event.repo,
+                RepoActivity(
+                    event_cnt=defaultdict(int),
+                    last_update=event.created_at
+                    )
+                )
+        repo = repos[event.repo]
         repo.event_cnt[event.type] += 1
         repo.last_update = max(repo.last_update,event.created_at)
     
     # Order by latets event in repo
-    repos = dict(sorted(
+    sorted_repos = sorted(
         repos.items(),
         key=lambda x: x[1].last_update,
         reverse=True
-        ))
+        )
 
     header = f"Recent activity of {username}:\n"
     content: list[str] = []
-    for repo,activity in repos.items():
-        for event,cnt in activity.event_cnt.items():
+    for repo,activity in sorted_repos:
+        for event,cnt in sorted(activity.event_cnt.items()):
             row = f"- done {cnt} {event} in {repo}"
             content.append(row)
 
