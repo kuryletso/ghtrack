@@ -1,5 +1,6 @@
 from ghtrack.api import GitHubClient, GitHubAPIError, ContributionDay
 from unittest.mock import Mock
+from datetime import datetime
 import pytest
 
 SAMPLE_HTML = """
@@ -59,7 +60,7 @@ def test_fetch_user_activity():
     assert len(events) == 1
     assert events[0].type == "PushEvent"
     assert events[0].repo == "user/repo"
-    assert events[0].created_at == "2026-02-18T00:00:00Z"
+    assert events[0].created_at == datetime.fromisoformat("2026-02-18T00:00:00Z")
 
 def test_fetch_contribution_graph():
     client = GitHubClient()
