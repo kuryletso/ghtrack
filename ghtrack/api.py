@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, date
 import httpx
 import os
 
@@ -15,7 +15,7 @@ class ActivityEvent:
 
 @dataclass
 class ContributionDay:
-    date: str
+    date: date
     level: int
 
 class GitHubAPIError(Exception):
@@ -62,6 +62,7 @@ class GitHubClient:
     
     def _close(self):
         self.client.close()
+        self.html_client.close()
 
     def __exit__(self, exc_type, exc, tb):
         self._close()
@@ -93,8 +94,8 @@ class GitHubClient:
 
         for cell in cells:
             contributions.append(ContributionDay(
-                date=cell["data-date"],                 # type: ignore
-                level=int(cell.get("data-level",0))     # type: ignore
+                date=date.fromisoformat( cell["data-date"] ),   # type: ignore
+                level=int(cell.get("data-level",0))             # type: ignore
             ))
         return contributions
 

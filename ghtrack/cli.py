@@ -2,6 +2,7 @@ import argparse
 import sys
 from api import GitHubClient
 from activity import format_activity_text, format_activity_json
+from graph import format_contribution_graph_text, format_contribution_graph_json
 
 def handle_graph(
         username: str,
@@ -36,7 +37,15 @@ def parse_args():
     parser.add_argument("--no-color",
                         action="store_true",
                         help="Disable ANSI colors in output. Automatically disabled if piped or redirected")
-    return parser.parse_args()
+    args =  parser.parse_args()
+
+    if args.json:
+        modes = sum([args.graph, args.activity])
+        if modes != 1:
+            parser.error("--json requires exactly one of --graph or --activity")
+
+    return args
+
 
 def main():
     args = parse_args()
@@ -61,7 +70,13 @@ def main():
         if show_graph:
             graph = client.fetch_contribution_graph(username=username)
             if args.json:
-                print(graph)
+                output = format_contribution_graph_json(days=graph)
+            else:
+                output = format_contribution_graph_text(
+                    days=graph,
+                    no_color=args.no_color
+                )
+            print(output)
 
         if show_activity:
             activity = client.fetch_user_activity(
