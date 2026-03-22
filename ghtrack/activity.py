@@ -1,4 +1,4 @@
-from api import ActivityEvent
+from ghtrack.api import ActivityEvent
 from dataclasses import dataclass
 from collections import defaultdict
 from datetime import datetime

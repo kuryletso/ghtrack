@@ -1,8 +1,8 @@
 import argparse
 import sys
-from api import GitHubClient
-from activity import format_activity_text, format_activity_json
-from graph import format_contribution_graph_text, format_contribution_graph_json
+from ghtrack.api import GitHubClient
+from ghtrack.activity import format_activity_text, format_activity_json
+from ghtrack.graph import format_contribution_graph_text, format_contribution_graph_json
 
 
 def parse_args():

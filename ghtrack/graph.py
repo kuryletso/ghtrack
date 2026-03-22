@@ -1,4 +1,4 @@
-from api import ContributionDay
+from ghtrack.api import ContributionDay
 from dataclasses import asdict
 import json
 

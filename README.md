@@ -3,7 +3,7 @@
 CLI tool to track GitHub activity and contribution graph from terminal.
 
 ## Features
-![example](screenshots/readme_screenshot_1.png)
+![example](docs/screenshots/readme_screenshot_1.png)
 - 📊 Contribution graph in terminal
 - 📈 Recent activity summary
 - ⚡ Fast and lightweight (uses httpx + scraping)
