@@ -1,7 +1,7 @@
 [project]
-name = "github-user-tracker"
+name = "ghtrack"
 version = "0.1.0"
-description = "Add your description here"
+description = "See recent GitHub activity and Contribution Graph in your shell."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
@@ -15,3 +15,6 @@ dev = [
     "pytest-cov>=7.0.0",
     "pytest-mock>=3.15.1",
 ]
+
+[project.scripts]
+ghtrack = "ghtrack.cli:main"
