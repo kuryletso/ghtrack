@@ -4,17 +4,6 @@ from api import GitHubClient
 from activity import format_activity_text, format_activity_json
 from graph import format_contribution_graph_text, format_contribution_graph_json
 
-def handle_graph(
-        username: str,
-):
-    ...
-
-def handle_activity(
-        username: str,
-        limit: int,
-        json: bool,
-):
-    ...
 
 def parse_args():
     parser = argparse.ArgumentParser(prog="ghtrack",
