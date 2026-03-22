@@ -18,3 +18,6 @@ dev = [
 
 [project.scripts]
 ghtrack = "ghtrack.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ghtrack*"]
